@@ -1,9 +1,12 @@
 export class Ship {
     constructor(length) {
         this.length = length;
-        this.ship = this.createShip();
+        this.ship = this._createShip();
     }
-    createShip() {
+    getShipLength() {
+        return this.ship.length;
+    }
+    _createShip() {
         let shipSlots = [];
         for(let i = 0; i < this.length; i++) {
             shipSlots.push({ hit: false})
