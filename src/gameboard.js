@@ -2,6 +2,7 @@ export class Gameboard {
     constructor() {
         this.gameBoardArray = this._createGameBoardArray();
         this.missedAttacks = [];
+        this.ships = [];
     }
     _createGameBoardArray() {
         let array = [];
@@ -48,11 +49,13 @@ export class Gameboard {
                 this.gameBoardArray[y][x+i].ship = ship;
                 this.gameBoardArray[y][x+i].shipIndex = i;
             }
+            this.ships.push(ship);
         } else if (this._validPlace(ship.getShipLength(), direction, x, y) && direction === 'vertical') {
             for (let i = 0; i < ship.getShipLength(); i++) {
                 this.gameBoardArray[y+i][x].ship = ship;
                 this.gameBoardArray[y+i][x].shipIndex = i;
             }
+            this.ships.push(ship);
         }
         else {
             return "INVALID PLACEMENT";
@@ -62,8 +65,20 @@ export class Gameboard {
     receiveAttack(x, y) {
         if(this.gameBoardArray[y][x].ship !== undefined) {
             this.gameBoardArray[y][x].ship.hit(this.gameBoardArray[y][x].shipIndex);
+        } else {
+            this.missedAttacks.push( { x, y} );
         }
     }
 
+    allShipsSunk() {
+        for (let i = 0; i < this.ships.length; i++) {
+            for (let j = 0; j < this.ships[i].ship.length; j++) {
+                if(this.ships[i].ship[j].hit === false) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 

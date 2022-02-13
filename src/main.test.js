@@ -27,6 +27,8 @@ describe('Ship', () => {
     });
 });
 
+
+
 describe('Gameboard', () => {
     test('Creating a gameboard has empty cells', () => {
         let board = new Gameboard();
@@ -79,12 +81,34 @@ describe('Gameboard', () => {
         expect(board.placeShip(ship2, 'vertical', 3, 0))
         .toBe('INVALID PLACEMENT');
     });
-    test('Receive attack works on empty ship', () => {
+    test('Receive attack works on ship', () => {
         let board = new Gameboard();
         let ship1 = new Ship(3);
         board.placeShip(ship1, 'horizontal', 2, 1);
         board.receiveAttack(3, 1);
-        console.log(board.getGameBoard()[1][2]);
         expect(board.getGameBoard()[1][2].ship.ship[1].hit).toBe(true);
+    });
+    test('Receive attack records a missed hit', () => {
+        let board = new Gameboard();
+        let ship1 = new Ship(3);
+        board.placeShip(ship1, 'horizontal', 2, 1);
+        board.receiveAttack(9, 9);
+        expect(board.missedAttacks[board.missedAttacks.length - 1])
+        .toStrictEqual( { x : 9, y : 9 } );
+    });
+    test('Able to recognize when all ships sunk on board', () => {
+        let board = new Gameboard();
+        let ship1 = new Ship(2);
+        let ship2 = new Ship(3);
+        board.placeShip(ship1, 'horizontal', 0, 0);
+        board.placeShip(ship2, 'vertical', 1, 1);
+        board.receiveAttack(0, 0);
+        board.receiveAttack(1, 0);
+        board.receiveAttack(1, 1);
+        expect(board.allShipsSunk()).toBe(false);
+        board.receiveAttack(1, 2);
+        board.receiveAttack(1, 3);
+        board.allShipsSunk();
+        expect(board.allShipsSunk()).toBe(true);
     });
 });
