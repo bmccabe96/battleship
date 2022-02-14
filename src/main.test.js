@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 import { Ship } from './ship.js';
 import { Gameboard } from './gameboard.js'
+import { Player } from './player.js';
 
 describe('Ship', () => {
     let ship = new Ship(5);
@@ -110,5 +112,28 @@ describe('Gameboard', () => {
         board.receiveAttack(1, 3);
         board.allShipsSunk();
         expect(board.allShipsSunk()).toBe(true);
+    });
+});
+
+describe('Player', () => {
+    test('Able to create player', () => {
+        let p1 = new Player('Brian');
+        expect(p1.name).toBe('Brian');
+        expect(p1.turn).toBe(true);
+    });
+    test('End turn functions properly', () => {
+        let p1 = new Player('Brian');
+        let p2 = new Player('Eve');
+        p1.endTurn(p2);
+        expect(p1.turn).toBe(false);
+        expect(p2.turn).toBe(true);
+    });
+    test('Player attack ends and starts turns appropriately', () => {
+        let p1 = new Player('Brian');
+        let p2 = new Player('Eve');
+        let board2 = new Gameboard();
+        p1.attack(0, 0, p2, board2);
+        expect(p1.turn).toBe(false);
+        expect(p2.turn).toBe(true);
     });
 });
