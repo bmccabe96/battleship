@@ -2,6 +2,7 @@
 import { Ship } from './ship.js';
 import { Gameboard } from './gameboard.js'
 import { Player } from './player.js';
+import { AI } from './ai.js';
 
 describe('Ship', () => {
     let ship = new Ship(5);
@@ -135,5 +136,22 @@ describe('Player', () => {
         p1.attack(0, 0, p2, board2);
         expect(p1.turn).toBe(false);
         expect(p2.turn).toBe(true);
+    });
+});
+
+describe('AI', () => {
+    test('Attack array is 100 length', () => {
+        let ai = new AI('Cpu');
+        expect(ai.attackArray.length).toBe(100);
+    });
+    test('Generate random attack pulls from attack array', () => {
+        let p1 = new Player('Brian');
+        let board1 = new Gameboard();
+        let ai = new AI('Cpu', p1, board1);
+        p1.endTurn(ai);
+        expect(ai.getAttackArray().length).toBe(100);
+        ai.generateRandomAttack();
+        expect(ai.getAttackArray().length).toBe(99);
+        expect(board1.getMissedAttacks().length).toBe(1);
     });
 });

@@ -21,7 +21,7 @@ export class Player {
         }
     }
     attack(x, y, enemyPlayer, enemyBoard) {
-        if(this.checkTurn) {
+        if(this.checkTurn()) {
             enemyBoard.receiveAttack(x, y);
             this.endTurn(enemyPlayer);
         }

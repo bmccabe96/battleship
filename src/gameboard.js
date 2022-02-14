@@ -66,8 +66,12 @@ export class Gameboard {
         if(this.gameBoardArray[y][x].ship !== undefined) {
             this.gameBoardArray[y][x].ship.hit(this.gameBoardArray[y][x].shipIndex);
         } else {
-            this.missedAttacks.push( { x, y} );
+            this.missedAttacks.push( { x, y } );
         }
+    }
+
+    getMissedAttacks() {
+        return this.missedAttacks;
     }
 
     allShipsSunk() {
