@@ -1,0 +1,37 @@
+html {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.content {
+    width: 70vw;
+    height: 50vh;
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px;
+}
+
+.playerBoard, .aiBoard{
+    width: 30vw;
+    height: 50vh;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    border: 1px solid blue;
+    grid-gap: 1px;
+    background-color: blue;
+  }
+
+.cell {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
