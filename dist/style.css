@@ -7,6 +7,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    gap: 10px;
 }
 
 .content {
@@ -30,8 +31,41 @@ body {
   }
 
 .cell {
-    background-color: white;
+    background-color: rgb(163, 189, 245);
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.loading-container {
+    width: 30vw;
+    height: 20vh;
+    border: 1px solid black;
+}
+
+.add-ships {
+    display: flex;
+    flex-wrap: wrap;
+    height: inherit;
+    width: inherit;
+}
+
+.ship.horizontal{
+    display: flex;
+    margin: 5px;
+}
+.ship.vertical{
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+.block {
+    width: 25px;
+    height: 25px;
+    background-color: black;
+    border-radius: 3px;
+}
+
+.placed-ship {
+    background-color: black;
 }

@@ -15,20 +15,43 @@ let board = new Gameboard();
 console.log(board);
 let ship = new Ship(2);
 board.placeShip(ship, 'horizontal', 0, 0);
-console.log(board);
+let ship2 = new Ship(4);
+board.placeShip(ship2, 'vertical', 3, 5);
+// console.log(board);
 
-let ship2 = new Ship(3);
-board.placeShip(ship2, 'horizontal', 0, 0);
-board.placeShip(ship2, 'vertical', 2, 0);
-board.placeShip(ship2, 'vertical', 4, 4);
-console.log(board);
-console.log(board.gameBoardArray[0][0].ship.length);
-console.log(board.gameBoardArray[4][4].ship.length);
+// let ship2 = new Ship(3);
+// board.placeShip(ship2, 'horizontal', 0, 0);
+// board.placeShip(ship2, 'vertical', 2, 0);
+// board.placeShip(ship2, 'vertical', 4, 4);
+// console.log(board);
+// console.log(board.gameBoardArray[0][0].ship.length);
+// console.log(board.gameBoardArray[4][4].ship.length);
 
 
 let b = new boardUI();
+b.dragStart(b.carrierHTML);
+b.dragStart(b.battleshipHTML);
+b.dragStart(b.submarineHTML);
+b.dragStart(b.cruiserHTML);
+b.dragStart(b.destroyerHTML);
 
+document.querySelector('p').addEventListener('click', () => {
+    b.updateDisplay('playerBoard', board);
+});
 
+let htmlShips = document.querySelectorAll('.ship');
+document.querySelector('.flip-alignment').addEventListener('click', () => {
+    htmlShips.forEach(ship => {
+        if (ship.classList.contains('horizontal')) {
+            ship.classList.remove('horizontal');
+            ship.classList.add('vertical');
+        }
+        else {
+            ship.classList.remove('vertical');
+            ship.classList.add('horizontal');
+        }
+    });
+});
 
 
 // placeMentShips.forEach(ship => {
