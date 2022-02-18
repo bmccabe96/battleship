@@ -1,9 +1,12 @@
 import { Ship } from './ship.js';
+import { Gameboard } from './gameboard.js';
 
 export class boardUI {
     constructor () {
-        this.playerBoard = this.createBoard('playerBoard');
-        this.aiBoard = this.createBoard('aiBoard');
+        this.playerBoard = new Gameboard();
+        this.aiBoard = new Gameboard();
+        this.playerBoardUI = this.createBoard('playerBoard');
+        this.aiBoardUI = this.createBoard('aiBoard');
         this.battleshipHTML = document.querySelector("#battleship");
         this.carrierHTML = document.querySelector("#carrier");
         this.submarineHTML = document.querySelector("#submarine");
@@ -15,22 +18,44 @@ export class boardUI {
         location.reload();
     }
     dropShip(e) {
-        let data = e.dataTransfer.getData('text/plain');
+        let data = JSON.parse(e.dataTransfer.getData('text/plain'));
         let x = parseInt(e.target.getAttribute('data-data-x'));
         let y = parseInt(e.target.getAttribute('data-data-y'));
         console.log(data, x, y);
-        // switch (data) {
-        //     case 'carrier':
-        //         return
-        //     case 'battleship':
-        //         return
-        //     case 'submarine':
-        //         return
-        //     case 'cruiser':
-        //         return
-        //     case 'destroyer':
-        //         return
-        // }
+        console.log(this.playerBoardUI);
+        switch (data.id) {
+            case 'carrier': {
+                let ship = new Ship(parseInt(data.length));
+                this.playerBoard.placeShip(ship, data.alignment, x, y);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                break;
+            }
+            case 'battleship': {
+                let ship = new Ship(parseInt(data.length));
+                this.playerBoard.placeShip(ship, data.alignment, x, y);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                break;
+            }
+            case 'submarine': {
+                let ship = new Ship(parseInt(data.length));
+                this.playerBoard.placeShip(ship, data.alignment, x, y);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                break;
+            }
+            case 'cruiser': {
+                let ship = new Ship(parseInt(data.length));
+                this.playerBoard.placeShip(ship, data.alignment, x, y);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                break;
+            }
+            case 'destroyer': {
+                let ship = new Ship(parseInt(data.length));
+                this.playerBoard.placeShip(ship, data.alignment, x, y);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                break;
+            }
+                
+        }
 
     }
 
@@ -57,8 +82,11 @@ export class boardUI {
 
     dragStart(element) {
         element.addEventListener("dragstart", (e) => {
-          e.dataTransfer.setData("text/plain", e.target.id);
-          console.log(e.dataTransfer);
+          e.dataTransfer.setData("text/plain", JSON.stringify({
+            'id': e.target.id,
+            'length': e.target.dataset.length,
+            'alignment': e.target.classList.contains('horizontal') ? 'horizontal' : 'vertical'
+          }));
         });
     }
 
@@ -86,6 +114,7 @@ export class boardUI {
                   board.appendChild(cell);
             }
         }
+        return boardName;
     }
 
 }
