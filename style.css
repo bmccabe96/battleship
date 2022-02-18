@@ -9,6 +9,9 @@ body {
     align-items: center;
     gap: 10px;
 }
+.hide {
+    display: none;
+}
 
 .content {
     width: 70vw;
