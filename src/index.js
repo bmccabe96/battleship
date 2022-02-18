@@ -12,7 +12,6 @@ import { boardUI } from './UI.js';
 // console.log(test.isSunk());
 
 let board = new Gameboard();
-console.log(board);
 let ship = new Ship(2);
 board.placeShip(ship, 'horizontal', 0, 0);
 let ship2 = new Ship(4);

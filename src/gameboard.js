@@ -22,7 +22,7 @@ export class Gameboard {
 
     _validPlace(length, direction, x, y) {
         if (direction === 'horizontal') {
-            if (x + length > 9) {
+            if (x + length > 10) {
                 return false;
             }
             for (let i = 0; i < length; i++) {
@@ -31,7 +31,7 @@ export class Gameboard {
                 }
             }
         } else if (direction === 'vertical') {
-            if (y + length > 9) {
+            if (y + length > 10) {
                 return false;
             }
             for (let i = 0; i < length; i++) {

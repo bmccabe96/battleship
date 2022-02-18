@@ -17,46 +17,85 @@ export class boardUI {
     refreshWindow() {
         location.reload();
     }
+
     dropShip(e) {
         let data = JSON.parse(e.dataTransfer.getData('text/plain'));
         let x = parseInt(e.target.getAttribute('data-data-x'));
         let y = parseInt(e.target.getAttribute('data-data-y'));
         console.log(data, x, y);
-        console.log(this.playerBoardUI);
+        console.log(e.target);
         switch (data.id) {
             case 'carrier': {
-                let ship = new Ship(parseInt(data.length));
-                this.playerBoard.placeShip(ship, data.alignment, x, y);
-                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
+                    this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
+                } else {
+                    alert("YO YOU CANT DO THAT");
+                }
                 break;
             }
             case 'battleship': {
-                let ship = new Ship(parseInt(data.length));
-                this.playerBoard.placeShip(ship, data.alignment, x, y);
-                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
+                    this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
+                } else {
+                    alert("YO YOU CANT DO THAT");
+                }                
                 break;
             }
             case 'submarine': {
-                let ship = new Ship(parseInt(data.length));
-                this.playerBoard.placeShip(ship, data.alignment, x, y);
-                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
+                    this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
+                } else {
+                    alert("YO YOU CANT DO THAT");
+                }                
                 break;
             }
             case 'cruiser': {
-                let ship = new Ship(parseInt(data.length));
-                this.playerBoard.placeShip(ship, data.alignment, x, y);
-                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
+                    this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
+                } else {
+                    alert("YO YOU CANT DO THAT");
+                }                
                 break;
             }
             case 'destroyer': {
-                let ship = new Ship(parseInt(data.length));
-                this.playerBoard.placeShip(ship, data.alignment, x, y);
-                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
+                    this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
+                } else {
+                    alert("YO YOU CANT DO THAT");
+                }                
                 break;
-            }
-                
+            }    
         }
-
+    }
+    dropShipPlaceHelper(length, id, alignment, x, y) {
+        let ship = new Ship(parseInt(length));
+        this.playerBoard.placeShip(ship, alignment, x, y);
+        this.updateDisplay(this.playerBoardUI, this.playerBoard);
+        document.querySelector(`#${id}`).remove();
+    }
+    validPlacement(alignment, x, y, length) {
+        console.log(alignment, x, y, length);
+        if (alignment === 'vertical') {
+            if (length + y > 10) {
+                return false;
+            }
+            for (let i = 0; i < length; i++) {
+                if (this.playerBoard.getGameBoard()[y+i][x].ship !== undefined) {
+                    return false;
+                }
+            }
+        }
+        else {
+            if (length + x > 10) {
+                return false;
+            }
+            for (let i = 0; i < length; i++) {
+                if (this.playerBoard.getGameBoard()[y][x+i].ship !== undefined) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     updateDisplay(boardName, board) {
@@ -65,15 +104,15 @@ export class boardUI {
         for (let i = 0; i < boardArray.length; i++) {
             for (let j = 0; j < boardArray.length; j++) {
                 if (boardArray[i][j].ship && boardName === 'playerBoard') {
-                    console.log(i, j);
+                    // console.log(i, j);
                     let cell = document.querySelector(`.${boardName} [data-data-x='${j}'][data-data-y='${i}']`);
-                    console.log(cell);
+                    // console.log(cell);
                     cell.classList.add('placed-ship');
                 }
             }
         }
-        console.log(boardArray);
-        console.log(missedAttacks);
+        // console.log(boardArray);
+        // console.log(missedAttacks);
     }
 
     attackEvent(target) {
