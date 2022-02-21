@@ -66,6 +66,7 @@ export class boardUI {
                 break;
             }    
         }
+        console.log(this.playerBoard);
     }
     dropShipPlaceHelper(length, id, alignment, x, y) {
         let ship = new Ship(parseInt(length));
@@ -116,7 +117,10 @@ export class boardUI {
     }
 
     attackEvent(target) {
-
+        let x = parseInt(target.dataset.dataX);
+        let y = parseInt(target.dataset.dataY);
+        this.aiBoard.receiveAttack(x, y);
+        console.log(this.aiBoard);
     }
 
     dragStart(element) {
@@ -139,7 +143,7 @@ export class boardUI {
                 cell.dataset.dataY = i;
                 if (boardName === "aiBoard") {
                     cell.addEventListener("click", (e) => {
-                      //attackEvent(e.target);
+                        this.attackEvent(e.target);
                     });
                 } else if (boardName === "playerBoard") {
                     cell.addEventListener("dragover", (e) => {
@@ -156,5 +160,30 @@ export class boardUI {
         return boardName;
     }
 
+    randomizeAIBoard() {
+        function _getRandomArbitrary(min, max) { //random min inclusive and max inclusive
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        const alignments = ['horizontal', 'vertical'];
+        const ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
+        for (let i = 0; i < ships.length; i++) {
+            let alignment = alignments[Math.random() > 0.5 ? 1 : 0];
+            let x = _getRandomArbitrary(0, 9);
+            let y = _getRandomArbitrary(0, 9);
+            try {
+                if (this.aiBoard._validPlace(ships[i].length, alignment, x, y)) {
+                    this.aiBoard.placeShip(ships[i], alignment, x, y);
+                }
+                else { //restart this iteration of loop if not valid place
+                    i--;
+                    continue;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
 }
 

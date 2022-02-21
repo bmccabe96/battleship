@@ -26,7 +26,8 @@ export class Gameboard {
                 return false;
             }
             for (let i = 0; i < length; i++) {
-                if (this.gameBoardArray[y][x+i].ship !== undefined) {
+                // console.log(this.gameBoardArray[y][x+1], x, y, length, direction);
+                if (this.gameBoardArray[y][x+i].ship) {
                     return false;
                 }
             }
@@ -35,7 +36,8 @@ export class Gameboard {
                 return false;
             }
             for (let i = 0; i < length; i++) {
-                if (this.gameBoardArray[y+i][x].ship !== undefined) {
+                // console.log(this.gameBoardArray[y+i][x], x, y, length, direction);
+                if (this.gameBoardArray[y+i][x].ship) {
                     return false;
                 }
             }
