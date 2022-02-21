@@ -2,6 +2,7 @@ export class Gameboard {
     constructor() {
         this.gameBoardArray = this._createGameBoardArray();
         this.missedAttacks = [];
+        this.hits = [];
         this.ships = [];
     }
     _createGameBoardArray() {
@@ -67,6 +68,7 @@ export class Gameboard {
     receiveAttack(x, y) {
         if(this.gameBoardArray[y][x].ship !== undefined) {
             this.gameBoardArray[y][x].ship.hit(this.gameBoardArray[y][x].shipIndex);
+            this.hits.push( { x, y } );
         } else {
             this.missedAttacks.push( { x, y } );
         }
@@ -74,6 +76,10 @@ export class Gameboard {
 
     getMissedAttacks() {
         return this.missedAttacks;
+    }
+
+    getHits() {
+        return this.hits;
     }
 
     allShipsSunk() {

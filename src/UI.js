@@ -71,7 +71,7 @@ export class boardUI {
     dropShipPlaceHelper(length, id, alignment, x, y) {
         let ship = new Ship(parseInt(length));
         this.playerBoard.placeShip(ship, alignment, x, y);
-        this.updateDisplay(this.playerBoardUI, this.playerBoard);
+        this.updateDisplayShipDrop(this.playerBoardUI, this.playerBoard);
         document.querySelector(`#${id}`).remove();
     }
     validPlacement(alignment, x, y, length) {
@@ -99,18 +99,41 @@ export class boardUI {
         return true;
     }
 
-    updateDisplay(boardName, board) {
+    updateDisplayShipDrop(boardName, board) {
         let boardArray = board.getGameBoard();
-        let missedAttacks = board.getMissedAttacks();
         for (let i = 0; i < boardArray.length; i++) {
             for (let j = 0; j < boardArray.length; j++) {
-                if (boardArray[i][j].ship && boardName === 'playerBoard') {
+                if (boardArray[i][j].ship && boardName === this.playerBoardUI) {
                     // console.log(i, j);
                     let cell = document.querySelector(`.${boardName} [data-data-x='${j}'][data-data-y='${i}']`);
                     // console.log(cell);
                     cell.classList.add('placed-ship');
                 }
             }
+        }
+    }
+
+    updateDisplay(boardName, board) {
+        let boardArray = board.getGameBoard();        
+        if (boardName === this.aiBoardUI) {
+            console.log(board.getHits());
+            console.log(board.getMissedAttacks());   
+            for (let i = 0; i < boardArray.length; i++) {
+                for (let j = 0; j < boardArray.length; j++) {
+                    let cell = document.querySelector(`.${boardName} [data-data-x='${j}'][data-data-y='${i}']`);
+                    let existsHits = Boolean(this.aiBoard.getHits().find(board => board.x === j && board.y === i));
+                    let existsMiss = Boolean(this.aiBoard.getMissedAttacks().find(board => board.x === j && board.y === i));
+                    if (existsHits) {
+                        cell.classList.add('hit-ship');
+                    }
+                    if (existsMiss) {
+                        cell.classList.add('missed-attack');
+                    }
+                }
+            }
+
+
+                
         }
         // console.log(boardArray);
         // console.log(missedAttacks);
@@ -119,8 +142,14 @@ export class boardUI {
     attackEvent(target) {
         let x = parseInt(target.dataset.dataX);
         let y = parseInt(target.dataset.dataY);
-        this.aiBoard.receiveAttack(x, y);
-        console.log(this.aiBoard);
+        const existsHits = Boolean(this.aiBoard.getHits().find(board => board.x === x && board.y === y));
+        const existsMiss = Boolean(this.aiBoard.getMissedAttacks().find(board => board.x === x && board.y === y));
+        if (existsHits || existsMiss) {
+            console.log("Already attacked");
+        } else {
+            this.aiBoard.receiveAttack(x, y);
+            this.updateDisplay(this.aiBoardUI, this.aiBoard);
+        }
     }
 
     dragStart(element) {

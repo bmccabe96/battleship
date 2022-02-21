@@ -72,3 +72,9 @@ body {
 .placed-ship {
     background-color: black;
 }
+.hit-ship {
+    background-color: rgb(163, 70, 42);
+}
+.missed-attack{
+    background-color: rgb(76, 128, 241);
+}

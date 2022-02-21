@@ -23,7 +23,6 @@ function game() {
     });
 
     b.randomizeAIBoard();
-    console.log(b.aiBoard);
 }
 
 export {game};
