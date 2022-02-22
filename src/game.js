@@ -1,4 +1,5 @@
-import { boardUI } from './UI.js'
+import { boardUI } from './UI.js';
+
 
 function game() {
     let b = new boardUI();
@@ -7,6 +8,8 @@ function game() {
     b.dragStart(b.submarineHTML);
     b.dragStart(b.cruiserHTML);
     b.dragStart(b.destroyerHTML);
+
+
 
     let htmlShips = document.querySelectorAll('.ship');
     document.querySelector('.flip-alignment').addEventListener('click', () => {
@@ -23,6 +26,11 @@ function game() {
     });
 
     b.randomizeAIBoard();
+    // let attack = generateAIAttack();
+    // console.log(attack);
+    // console.log(AIAttacks);
+
+
 }
 
 export {game};

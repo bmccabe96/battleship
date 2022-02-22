@@ -6,7 +6,8 @@ export class boardUI {
         this.playerBoard = new Gameboard();
         this.aiBoard = new Gameboard();
         this.playerBoardUI = this.createBoard('playerBoard');
-        this.aiBoardUI = this.createBoard('aiBoard');
+        this.aiBoardUI = null;
+        this.AIAttacks = [];
         this.battleshipHTML = document.querySelector("#battleship");
         this.carrierHTML = document.querySelector("#carrier");
         this.submarineHTML = document.querySelector("#submarine");
@@ -73,6 +74,9 @@ export class boardUI {
         this.playerBoard.placeShip(ship, alignment, x, y);
         this.updateDisplayShipDrop(this.playerBoardUI, this.playerBoard);
         document.querySelector(`#${id}`).remove();
+        if(this.playerBoard.ships.length === 5) {
+            this.aiBoardUI = this.createBoard('aiBoard');
+        }
     }
     validPlacement(alignment, x, y, length) {
         console.log(alignment, x, y, length);
@@ -116,8 +120,8 @@ export class boardUI {
     updateDisplay(boardName, board) {
         let boardArray = board.getGameBoard();        
         if (boardName === this.aiBoardUI) {
-            console.log(board.getHits());
-            console.log(board.getMissedAttacks());   
+            // console.log(board.getHits());
+            // console.log(board.getMissedAttacks());   
             for (let i = 0; i < boardArray.length; i++) {
                 for (let j = 0; j < boardArray.length; j++) {
                     let cell = document.querySelector(`.${boardName} [data-data-x='${j}'][data-data-y='${i}']`);
@@ -130,14 +134,61 @@ export class boardUI {
                         cell.classList.add('missed-attack');
                     }
                 }
-            }
-
-
-                
+            }        
+        }
+        if (boardName === this.playerBoardUI) {
+            for (let i = 0; i < boardArray.length; i++) {
+                for (let j = 0; j < boardArray.length; j++) {
+                    let cell = document.querySelector(`.${boardName} [data-data-x='${j}'][data-data-y='${i}']`);
+                    let existsHits = Boolean(this.playerBoard.getHits().find(board => board.x === j && board.y === i));
+                    let existsMiss = Boolean(this.playerBoard.getMissedAttacks().find(board => board.x === j && board.y === i));
+                    if (existsHits) {
+                        cell.classList.add('hit-ship');
+                    }
+                    if (existsMiss) {
+                        cell.classList.add('missed-attack');
+                    }
+                }
+            }     
         }
         // console.log(boardArray);
         // console.log(missedAttacks);
     }
+
+    generateAIAttack() {
+        function _getRandomArbitrary(min, max) { //random min inclusive and max inclusive
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        let attackX = _getRandomArbitrary(0, 9);
+        let attackY = _getRandomArbitrary(0, 9);
+        let existing = Boolean(this.AIAttacks.find(board => board.x === attackX && board.y === attackY));
+        while(true) {
+            console.log('yo');
+            if (!existing) { 
+                this.AIAttacks.push( { 'x': attackX, 'y': attackY });
+                this.playerBoard.receiveAttack(attackX, attackY);
+                this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                return;
+            }else {
+                attackX = _getRandomArbitrary(0, 9);
+                attackY = _getRandomArbitrary(0, 9);
+                existing = Boolean(this.AIAttacks.find(board => board.x === attackX && board.y === attackY));
+            }
+        }
+    }
+
+    // playerReceiveAttack(x, y) {
+    //     const existsHits = Boolean(this.playerBoard.getHits().find(board => board.x === x && board.y === y));
+    //     const existsMiss = Boolean(this.playerBoard.getMissedAttacks().find(board => board.x === x && board.y === y));
+    //     if (existsHits || existsMiss) {
+    //         console.log("Already attacked");
+    //     } else {
+    //         this.aiBoard.receiveAttack(x, y);
+    //         this.updateDisplay(this.aiBoardUI, this.aiBoard);
+    //     }
+    // }
 
     attackEvent(target) {
         let x = parseInt(target.dataset.dataX);
@@ -149,6 +200,7 @@ export class boardUI {
         } else {
             this.aiBoard.receiveAttack(x, y);
             this.updateDisplay(this.aiBoardUI, this.aiBoard);
+            this.generateAIAttack();
         }
     }
 
@@ -188,6 +240,8 @@ export class boardUI {
         }
         return boardName;
     }
+
+    
 
     randomizeAIBoard() {
         function _getRandomArbitrary(min, max) { //random min inclusive and max inclusive
