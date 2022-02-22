@@ -9,8 +9,8 @@
     <title>Battleship</title>
 </head>
 <body>
-    <p draggable="true">Yo</p>
-    <div class="flip-alignment">Horizontal/Vertical</div>
+    <div class="title">Battleship!</div>
+    <div class="description">Drag ships into the board to the left, then play the CPU! Hits are marked as red, misses as blue.</div>
     <div class="loading-container">
         <div  class="add-ships">
             <div class="ship horizontal" id="carrier" data-length='5' draggable="true">
@@ -19,7 +19,7 @@
                 <div class="block"></div>
                 <div class="block"></div>
                 <div class="block"></div>
-              </div>
+            </div>
             <div class="ship horizontal" id="battleship" data-length='4' draggable="true">
               <div class="block"></div>
               <div class="block"></div>
@@ -40,8 +40,11 @@
               <div class="block"></div>
               <div class="block"></div>
             </div>
-          </div>
+        </div>
     </div>
+    <div class="flip-alignment">Horizontal/Vertical</div>
+    <div class="winning-message"></div>
+    <div class="new-game hide">New Game?</div>
     <div class="content">
         <div class="playerBoard"></div>
         <div class="aiBoard"></div>

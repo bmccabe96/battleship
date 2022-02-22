@@ -23,14 +23,12 @@ export class boardUI {
         let data = JSON.parse(e.dataTransfer.getData('text/plain'));
         let x = parseInt(e.target.getAttribute('data-data-x'));
         let y = parseInt(e.target.getAttribute('data-data-y'));
-        console.log(data, x, y);
-        console.log(e.target);
         switch (data.id) {
             case 'carrier': {
                 if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
                     this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
                 } else {
-                    alert("YO YOU CANT DO THAT");
+                    alert("Invalid placement");
                 }
                 break;
             }
@@ -38,7 +36,7 @@ export class boardUI {
                 if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
                     this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
                 } else {
-                    alert("YO YOU CANT DO THAT");
+                    alert("Invalid placement");
                 }                
                 break;
             }
@@ -46,7 +44,7 @@ export class boardUI {
                 if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
                     this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
                 } else {
-                    alert("YO YOU CANT DO THAT");
+                    alert("Invalid placement");
                 }                
                 break;
             }
@@ -54,7 +52,7 @@ export class boardUI {
                 if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
                     this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
                 } else {
-                    alert("YO YOU CANT DO THAT");
+                    alert("Invalid placement");
                 }                
                 break;
             }
@@ -62,12 +60,11 @@ export class boardUI {
                 if (this.validPlacement(data.alignment, x, y, parseInt(data.length))) {
                     this.dropShipPlaceHelper(data.length, data.id, data.alignment, x, y);
                 } else {
-                    alert("YO YOU CANT DO THAT");
+                    alert("Invalid placement");
                 }                
                 break;
             }    
         }
-        console.log(this.playerBoard);
     }
     dropShipPlaceHelper(length, id, alignment, x, y) {
         let ship = new Ship(parseInt(length));
@@ -79,7 +76,6 @@ export class boardUI {
         }
     }
     validPlacement(alignment, x, y, length) {
-        console.log(alignment, x, y, length);
         if (alignment === 'vertical') {
             if (length + y > 10) {
                 return false;
@@ -165,11 +161,19 @@ export class boardUI {
         let attackY = _getRandomArbitrary(0, 9);
         let existing = Boolean(this.AIAttacks.find(board => board.x === attackX && board.y === attackY));
         while(true) {
-            console.log('yo');
             if (!existing) { 
                 this.AIAttacks.push( { 'x': attackX, 'y': attackY });
                 this.playerBoard.receiveAttack(attackX, attackY);
                 this.updateDisplay(this.playerBoardUI, this.playerBoard);
+                if(this.checkForWinner(this.playerBoard)) {
+                    const winnerHTML = document.querySelector('.winning-message');
+                    winnerHTML.textContent = 'CPU WINS';
+                    const newGame = document.querySelector('.new-game');
+                    newGame.classList.toggle('hide');
+                    newGame.addEventListener('click', () => {
+                        this.refreshWindow();
+                    });
+                }                
                 return;
             }else {
                 attackX = _getRandomArbitrary(0, 9);
@@ -178,17 +182,6 @@ export class boardUI {
             }
         }
     }
-
-    // playerReceiveAttack(x, y) {
-    //     const existsHits = Boolean(this.playerBoard.getHits().find(board => board.x === x && board.y === y));
-    //     const existsMiss = Boolean(this.playerBoard.getMissedAttacks().find(board => board.x === x && board.y === y));
-    //     if (existsHits || existsMiss) {
-    //         console.log("Already attacked");
-    //     } else {
-    //         this.aiBoard.receiveAttack(x, y);
-    //         this.updateDisplay(this.aiBoardUI, this.aiBoard);
-    //     }
-    // }
 
     attackEvent(target) {
         let x = parseInt(target.dataset.dataX);
@@ -200,7 +193,23 @@ export class boardUI {
         } else {
             this.aiBoard.receiveAttack(x, y);
             this.updateDisplay(this.aiBoardUI, this.aiBoard);
-            this.generateAIAttack();
+            if(this.checkForWinner(this.aiBoard)) {
+                const winnerHTML = document.querySelector('.winning-message');
+                winnerHTML.textContent = 'PLAYER WINS';
+                let oldAIBoard = document.querySelector(".aiBoard");
+                let newBoard = oldAIBoard.cloneNode(true);
+                oldAIBoard.parentNode.replaceChild(newBoard, oldAIBoard);
+                const newGame = document.querySelector('.new-game');
+                newGame.classList.toggle('hide');
+                newGame.addEventListener('click', () => {
+                    this.refreshWindow();
+                });
+            }else {
+                setTimeout(() => {
+                    this.generateAIAttack();
+                }, 150);
+            }
+            
         }
     }
 
@@ -266,6 +275,15 @@ export class boardUI {
             } catch (e) {
                 console.error(e);
             }
+        }
+    }
+
+    checkForWinner(board) {
+        if(board.allShipsSunk()) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
