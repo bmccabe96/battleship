@@ -1,5 +1,7 @@
 html {
     box-sizing: border-box;
+    background-color: rgb(191, 243, 243);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 body {
@@ -12,11 +14,28 @@ body {
 .hide {
     display: none;
 }
+.title{
+    font-size: 2rem;
+}
+.description {
+    font-size: 1rem;
+}
+
+.flip-alignment,
+.new-game {
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 3px 10px;
+}
+.flip-alignment:active,
+.new-game:active {
+    transform: scale(0.9,0.9);
+}
 
 .content {
-    width: 70vw;
+    width: 85vw;
     height: 50vh;
-    border: 1px solid black;
     display: flex;
     justify-content: space-evenly;
     padding: 5px;
@@ -40,27 +59,37 @@ body {
     align-items: center;
 }
 
+.aiBoard > .cell {
+    cursor: crosshair;
+}
+
 .loading-container {
+    display: flex;
     width: 30vw;
     height: 20vh;
+    background-color: rgb(112, 182, 112);
     border: 1px solid black;
+    border-radius: 2px;
 }
+
 
 .add-ships {
     display: flex;
     flex-wrap: wrap;
-    height: inherit;
-    width: inherit;
+    align-content: flex-start;
+
 }
 
 .ship.horizontal{
     display: flex;
     margin: 5px;
+    cursor: pointer;
 }
 .ship.vertical{
     display: flex;
     flex-direction: column;
     margin: 5px;
+    cursor: pointer;
 }
 .block {
     width: 20px;
@@ -74,7 +103,15 @@ body {
 }
 .hit-ship {
     background-color: rgb(163, 70, 42);
+    transition: .7s background-color;
 }
 .missed-attack{
     background-color: rgb(76, 128, 241);
+    transition: .7s background-color;
+}
+
+.winning-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: wavy;
 }
